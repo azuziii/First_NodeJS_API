@@ -2,26 +2,21 @@
 // because I don't know if they can be anything else other than server side.
 
 const USERS = require("../models/users.js"),
-  {
-    writeHead,
-    JSONResponse,
-    getBody,
-    getID
-  } = require("../utils.js");
+  { JSONResponse, getBody, getID } = require("../utils.js");
 
 // @desc get all users
 // @route GET /api/users
 async function getAll(req, res) {
   try {
     const RESPONSE = await USERS.getAll();
-    writeHead(res);
+    res.writeHead(200, { "Content-Type": "application/json" });
     res.end(JSON.stringify(RESPONSE));
   } catch (err) {
     console.log(err);
-    writeHead(res, 500);
-    res.end(JSONResponse({
-      http_status: 500
-    }));
+    res.writeHead(500, { "Content-Type": "application/json" });
+    res.end(
+      JSONResponse(500)
+    );
   }
 }
 
@@ -31,14 +26,14 @@ async function addUser(req, res) {
   try {
     const BODY = await getBody(req);
     const RESPONSE = await USERS.add(JSON.parse(BODY));
-    writeHead(res);
+    res.writeHead(200, { "Content-Type": "application/json" });
     res.end(JSON.stringify(RESPONSE));
   } catch (err) {
     console.log(err);
-    writeHead(res, 500);
-    res.end(JSONResponse({
-      http_status: 500
-    }));
+    res.writeHead(500, { "Content-Type": "application/json" });
+    res.end(
+      JSONResponse(500)
+    );
   }
 }
 
@@ -49,22 +44,21 @@ async function getUser(req, res) {
     const ID = getID(req.url),
       RESPONSE = await USERS.getById(ID);
 
-    if (RESPONSE ? ? false) {
-      writeHead(res);
+    if (RESPONSE ?? false) {
+    res.writeHead(200, { "Content-Type": "application/json" });
       return res.end(JSON.stringify(RESPONSE));
     }
 
-    writeHead(res, 404);
-    return res.end(JSONResponse({
-      msg: "User not found",
-      http_status: 404
-    }));
+    res.writeHead(404, { "Content-Type": "application/json" });
+    return res.end(
+      JSONResponse(404, "user not found")
+    );
   } catch (err) {
     console.log(err);
-    writeHead(res, 500);
-    res.end(JSONResponse({
-      http_status: 500
-    }));
+    res.writeHead(500, { "Content-Type": "application/json" });
+    res.end(
+      JSONResponse(500)
+    );
   }
 }
 
@@ -75,25 +69,24 @@ async function remove(req, res) {
     const ID = getID(req.url),
       RESPONSE = await USERS.getById(ID);
 
-    if (RESPONSE ? ? false) {
+    if (RESPONSE ?? false) {
       await USERS.remove(ID);
-      writeHead(res);
-      return res.end(JSONResponse({
-        msg: `Removed user with id ${ID}`
-      }));
+    res.writeHead(200, { "Content-Type": "application/json" });
+      return res.end(
+        JSONResponse(200, `removed user with id ${ID}`)
+      );
     }
 
-    writeHead(res, 404);
-    return res.end(JSONResponse({
-      msg: "User not found",
-      http_status: 404
-    }));
+    res.writeHead(404, { "Content-Type": "application/json" });
+    return res.end(
+      JSONResponse(404, "user not found")
+    );
   } catch (err) {
     console.log(err);
-    writeHead(res, 500);
-    res.end(JSONResponse({
-      http_status: 500
-    }));
+    res.writeHead(500, { "Content-Type": "application/json" });
+    res.end(
+      JSONResponse(500)
+    );
   }
 }
 
@@ -105,23 +98,22 @@ async function edit(req, res) {
     const ID = getID(req.url),
       RESPONSE = await USERS.getById(ID);
 
-    if (RESPONSE ? ? false) {
+    if (RESPONSE ?? false) {
       const UPDATED_USER = await USERS.edit(ID, JSON.parse(BODY));
-      writeHead(res);
+    res.writeHead(200, { "Content-Type": "application/json" });
       return res.end(JSON.stringify(UPDATED_USER));
     }
 
-    writeHead(res, 404);
-    return res.end(JSONResponse({
-      msg: "User not found",
-      http_status: 404
-    }));
+    res.writeHead(404, { "Content-Type": "application/json" });
+    return res.end(
+      JSONResponse(404, "user not found")
+    );
   } catch (err) {
     console.log(err);
-    writeHead(res, 500);
-    res.end(JSONResponse({
-      http_status: 500
-    }));
+    res.writeHead(500, { "Content-Type": "application/json" });
+    res.end(
+      JSONResponse(500)
+    );
   }
 }
 
@@ -130,5 +122,5 @@ module.exports = {
   addUser,
   getUser,
   remove,
-  edit
+  edit,
 };

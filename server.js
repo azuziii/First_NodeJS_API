@@ -1,43 +1,38 @@
 require("dotenv").config();
 
-const {
-  createServer
-} = require("http"), {
-    writeHead,
-    JSONResponse
-  } = require("./utils.js"),
-  USERS = require("./controllers/users.js");
-
-const PORT = process.env.PORT || 3000,
-  ROUTES = [{
+const { createServer } = require("http");
+const { JSONResponse } = require("./utils.js");
+const USERS = require("./controllers/users.js");
+const PORT = process.env.PORT || 3000;
+const ROUTES = [
+  {
     reg: /^\/api\/users$/,
     methods: {
-      "GET": USERS.getAll,
-      "POST": USERS.addUser
-    }
-  }, {
+      GET: USERS.getAll,
+      POST: USERS.addUser,
+    },
+  },
+  {
     reg: /^\/api\/user\/(\w+)$/,
     methods: {
-      "GET": USERS.getUser,
-      "DELETE": USERS.remove,
-      "PUT": USERS.edit
+      GET: USERS.getUser,
+      DELETE: USERS.remove,
+      PUT: USERS.edit,
     },
-  }];
+  },
+];
 
 const SERVER = createServer((req, res) => {
-  const METHOD = req.method;
+  const REQUEST_METHOD = req.method;
 
-  // IDK no other to do this, I had to use .some. Will be updated later
-  const R = ROUTES.some(route => {
-    if (req.url.match(route.reg) && route.methods[METHOD]) {
-      return route.methods[METHOD](req, res);
-    }
-  });
+  const MATCHED_ROUTE = ROUTES.find(
+    (route) => req.url.match(route.reg) && route.methods[REQUEST_METHOD]
+  );
 
-  if (!R) {
-    writeHead(res, 404);
-    res.end(JSONResponse({
-      http_status: 404
-    }));
+  if (!MATCHED_ROUTE) {
+    res.writeHead(404, { "Content-Type": "application/json" });
+    res.end(JSONResponse(404, "route not found"));
+  } else {
+    MATCHED_ROUTE.methods[REQUEST_METHOD](req, res);
   }
 }).listen(PORT, () => console.log(`Server running on port ${PORT}`));

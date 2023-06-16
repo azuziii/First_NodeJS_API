@@ -1,7 +1,5 @@
-const USERS = require("../data/users.json"),
-  {
-    writeToFile
-  } = require("../utils.js");
+const USERS = require("../data/users.json");
+const { writeToFile } = require("../utils.js");
 
 function getAll() {
   return new Promise((res, rej) => {
@@ -11,7 +9,7 @@ function getAll() {
 
 function getById(id) {
   return new Promise((res, rej) => {
-    const USER = USERS.find(user => user.id == id);
+    const USER = USERS.find((user) => user.id == id);
 
     res(USER);
   });
@@ -21,7 +19,7 @@ function add(body) {
   return new Promise((res, rej) => {
     const USER = {
       id: Math.floor(Math.random() * 1000000),
-      ...body
+      ...body,
     };
 
     USERS.push(USER);
@@ -32,7 +30,7 @@ function add(body) {
 
 function remove(id) {
   return new Promise((res, rej) => {
-    const INDEX = USERS.findIndex(user => user.id == id);
+    const INDEX = USERS.findIndex((user) => user.id == id);
 
     USERS.splice(INDEX, 1);
     writeToFile("./data/users.json", JSON.stringify(USERS));
@@ -42,12 +40,12 @@ function remove(id) {
 
 function edit(id, content) {
   return new Promise((res, rej) => {
-    const INDEX = USERS.findIndex(user => user.id == id);
+    const INDEX = USERS.findIndex((user) => user.id == id);
     const OLD_USER = USERS[INDEX];
     const USER = {
       ...OLD_USER,
       ...content,
-      id
+      id,
     };
     USERS[INDEX] = USER;
     writeToFile("./data/users.json", JSON.stringify(USERS));
@@ -60,5 +58,5 @@ module.exports = {
   add,
   getById,
   remove,
-  edit
+  edit,
 };
