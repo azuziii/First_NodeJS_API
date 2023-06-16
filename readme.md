@@ -2,6 +2,11 @@
 
 My first API :)
 
+# How to run
+
+1. Run **npm ci**
+2. Then **npm start**
+
 # Routes
 
 >**Get all users**
