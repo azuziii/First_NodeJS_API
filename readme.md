@@ -1,20 +1,25 @@
 # My first API
 
-my first API :)
+My first API :)
 
-# routes
+# Routes
 
->**get all users**
->>GET /api/users
+>**Get all users**
+>>GET
+>>/api/users
 
->**add user**
->>POST /api/users
+>**Add user**
+>>POST
+>>/api/users
 
->**get user by id**
->>GET /api/user/:id
+>**Get user by id**
+>>GET
+>>/api/users/:id
 
->**edit user**
->>PUT /api/user/:id
+>**Edit user**
+>>PUT
+>>/api/users/:id
 
->**remove user**
->>DELETE /api/user/:id
+>**Remove user**
+>>DELETE
+>>/api/users/:id
